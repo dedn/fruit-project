@@ -1,0 +1,27 @@
+/* Стиль для контейнера прокрутки */
+.scroll-container {
+    max-height: 400px;
+    overflow-y: auto;
+    scrollbar-width: thin; /* Для Firefox */
+    scrollbar-color: #3f51b5 #f1f1f1; /* Цвет ползунка и фона для Firefox */
+}
+
+/* Стилизация для WebKit-браузеров */
+.scroll-container::-webkit-scrollbar {
+    width: 8px;
+}
+
+.scroll-container::-webkit-scrollbar-track {
+    background: #f1f1f1; /* Цвет фона области */
+    border-radius: 8px;
+}
+
+.scroll-container::-webkit-scrollbar-thumb {
+    background-color: #3f51b5; /* Цвет ползунка */
+    border-radius: 8px;
+    border: 2px solid #f1f1f1; /* Окантовка ползунка */
+}
+
+.scroll-container::-webkit-scrollbar-thumb:hover {
+    background-color: #3048a1; /* Цвет ползунка при наведении */
+}

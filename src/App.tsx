@@ -1,14 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-// import axios from 'axios';
-import {
-  Container,
-  Select,
-  MenuItem,
-  InputLabel,
-  FormControl,
-  Typography,
-  Grid2,
-} from '@mui/material';
+import { Container, Typography, Grid, Snackbar, CircularProgress, Box } from '@mui/material';
 import FruitList from './components/fruitList/fruitList.tsx';
 import FruitJar from './components/fruitJar/fruitJar.tsx';
 import { Fruit } from './types/fruit';
@@ -20,10 +11,13 @@ const App: React.FC = () => {
   const [fruits, setFruits] = useState<Fruit[]>([]);
   const [groupBy, setGroupBy] = useState<string>('None');
   const [jar, setJar] = useState<Fruit[]>([]);
+  const [notification, setNotification] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
   const apiService = useMemo(() => new ApiServes(), []);
 
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true);
       try {
         const response = await apiService.getDataList<Fruit[]>();
         if (response.success && response.data) {
@@ -33,6 +27,8 @@ const App: React.FC = () => {
         }
       } catch (error) {
         console.error('Error fetching data:', error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -43,8 +39,16 @@ const App: React.FC = () => {
     setGroupBy(event.target.value as string);
   };
 
-  const addToJar = (fruit: Fruit) => {
-    setJar((prevJar) => [...prevJar, fruit]);
+  const addToJar = (fruit: Fruit): void => {
+    setJar((prevJar: Fruit[]): Fruit[] => {
+      const isFruitInJar = prevJar.some((item) => item.name === fruit.name);
+      if (!isFruitInJar) {
+        return [...prevJar, fruit];
+      } else {
+        setNotification(`The fruit ${fruit.name} is already in the jar.`);
+        return prevJar;
+      }
+    });
   };
 
   const handleRemoveFruit = (fruitToRemove: Fruit) => {
@@ -59,26 +63,37 @@ const App: React.FC = () => {
     <>
       <Header />
       <Container>
-        <Typography variant="h4" align="center">
+        <Typography variant="h4" align="center" style={{ margin: '40px' }}>
           Fruit App
         </Typography>
-        <FormControl fullWidth variant="outlined" margin="normal">
-          <InputLabel>Group by</InputLabel>
-          <Select value={groupBy} onChange={handleGroupByChange}>
-            <MenuItem value="None">None</MenuItem>
-            <MenuItem value="Family">Family</MenuItem>
-            <MenuItem value="Order">Order</MenuItem>
-            <MenuItem value="Genus">Genus</MenuItem>
-          </Select>
-        </FormControl>
-        <Grid2 container spacing={2}>
-          <Grid2 xs={8}>
-            <FruitList fruits={fruits} groupBy={groupBy} addToJar={addToJar} />
-          </Grid2>
-          <Grid2 xs={4}>
-            <FruitJar jar={jar} onRemoveFruit={handleRemoveFruit} onRemoveAll={removeAllFruits} />
-          </Grid2>
-        </Grid2>
+        {loading ? (
+          <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
+            <CircularProgress />
+          </Box>
+        ) : (
+          <Grid container spacing={3} alignItems="flex-start">
+            <Grid xs={12} md={3} item style={{ flexGrow: 1 }}>
+              <FruitList
+                fruits={fruits}
+                groupBy={groupBy}
+                addToJar={addToJar}
+                onGroupByChange={handleGroupByChange}
+              />
+            </Grid>
+            <Grid xs={12} md={9} item>
+              <FruitJar jar={jar} onRemoveFruit={handleRemoveFruit} onRemoveAll={removeAllFruits} />
+            </Grid>
+          </Grid>
+        )}
+        {notification && (
+          <Snackbar
+            open={true}
+            message={notification}
+            autoHideDuration={3000}
+            onClose={() => setNotification(null)}
+            anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+          />
+        )}
       </Container>
     </>
   );
