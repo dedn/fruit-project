@@ -58,7 +58,7 @@ const FruitJar: React.FC<FruitJarProps> = ({ jar, onRemoveFruit, onRemoveAll }) 
         >
           <List style={{ flex: 1, margin: 0, padding: 0 }}>
             <TransitionGroup>
-              {jar.map((fruit, index) => (
+              {jar.map((fruit) => (
                 <Collapse key={fruit.name}>
                   <ListItem
                     style={{

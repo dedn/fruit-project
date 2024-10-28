@@ -5,6 +5,7 @@ export interface Fruit {
   order: string;
   genus: string;
   nutritions: Nutrition;
+  [key: string]: any;
 }
 
 interface Nutrition {

@@ -41,7 +41,7 @@ const FruitList: React.FC<FruitListProps> = ({ fruits, groupBy, addToJar, onGrou
 
   return (
     <>
-      <FormControl fullWidth variant="outlined" margin="small" size="small">
+      <FormControl fullWidth variant="outlined" size="small">
         <InputLabel>Group by</InputLabel>
         <Select value={groupBy} onChange={onGroupByChange}>
           <MenuItem value="None">None</MenuItem>
