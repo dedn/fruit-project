@@ -7,9 +7,7 @@ interface ApiResponse<T> {
 }
 
 export default class ApiService {
-  private _apiBase: string = import.meta.env.VITE_API_BASE_URL;
-
-  // General method to fetch resources with dynamic method and URL
+  private _apiBase: string = 'https://proxy-fruit-project-265fff9e0ca8.herokuapp.com/proxy';
   private async request<T>(
     url: string,
     method: HttpMethod = 'GET',
