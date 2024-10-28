@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Container, Typography, Grid, Snackbar, CircularProgress, Box } from '@mui/material';
-import FruitList from './components/fruitList/fruitList.tsx';
-import FruitJar from './components/fruitJar/fruitJar.tsx';
+import FruitList from './components/fruitList/FruitList';
+import FruitJar from './components/fruitJar/FruitJar';
 import { Fruit } from './types/fruit';
-import ApiServes from './services/server.ts';
-import Header from './components/header/Header.tsx';
+import ApiServes from './services/server';
+import Header from './components/header/Header';
 import { SelectChangeEvent } from '@mui/material/Select';
+import styles from './App.module.css'; // Import the CSS Module
 
 const App: React.FC = () => {
   const [fruits, setFruits] = useState<Fruit[]>([]);
@@ -36,18 +37,17 @@ const App: React.FC = () => {
   }, [apiService]);
 
   const handleGroupByChange = (event: SelectChangeEvent<string>) => {
-    setGroupBy(event.target.value as string);
+    setGroupBy(event.target.value);
   };
 
   const addToJar = (fruit: Fruit): void => {
-    setJar((prevJar: Fruit[]): Fruit[] => {
+    setJar((prevJar) => {
       const isFruitInJar = prevJar.some((item) => item.name === fruit.name);
-      if (!isFruitInJar) {
-        return [...prevJar, fruit];
-      } else {
+      if (isFruitInJar) {
         setNotification(`The fruit ${fruit.name} is already in the jar.`);
         return prevJar;
       }
+      return [...prevJar, fruit];
     });
   };
 
@@ -59,20 +59,27 @@ const App: React.FC = () => {
     setJar([]);
   };
 
+  const handleCloseSnackbar = () => {
+    setNotification(null);
+  };
+
   return (
     <>
       <Header />
-      <Container>
-        <Typography variant="h4" align="center" style={{ margin: '40px' }}>
+      <Container className={styles.container}>
+        <Typography variant="h4" className={styles.title}>
           Fruit App
         </Typography>
         {loading ? (
-          <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
+          <Box className={styles.loadingContainer}>
             <CircularProgress />
+            <Typography variant="h6" className={styles.loadingText}>
+              Loading fruits...
+            </Typography>
           </Box>
         ) : (
-          <Grid container spacing={3} alignItems="flex-start">
-            <Grid xs={12} md={3} item style={{ flexGrow: 1 }}>
+          <Grid container spacing={3} className={styles.gridContainer}>
+            <Grid item xs={12} md={3} className={styles.fruitList}>
               <FruitList
                 fruits={fruits}
                 groupBy={groupBy}
@@ -80,7 +87,7 @@ const App: React.FC = () => {
                 onGroupByChange={handleGroupByChange}
               />
             </Grid>
-            <Grid xs={12} md={9} item>
+            <Grid item xs={12} md={9} className={styles.fruitJar}>
               <FruitJar jar={jar} onRemoveFruit={handleRemoveFruit} onRemoveAll={removeAllFruits} />
             </Grid>
           </Grid>
@@ -90,7 +97,7 @@ const App: React.FC = () => {
             open={true}
             message={notification}
             autoHideDuration={3000}
-            onClose={() => setNotification(null)}
+            onClose={handleCloseSnackbar}
             anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
           />
         )}

@@ -1,0 +1,37 @@
+/* App.module.css */
+
+.container {
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+.title {
+  margin: 40px 0;
+  text-align: center;
+}
+
+.loadingContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.loadingText {
+  margin-top: 20px;
+}
+
+.gridContainer {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.fruitList {
+  flex: 1 1 100%; /* Default to full width on small screens */
+  max-width: 300px; /* Limit width on larger screens */
+}
+
+.fruitJar {
+  flex: 1 1 100%; /* Default to full width on small screens */
+}
