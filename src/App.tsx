@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Container, Typography, Grid, Snackbar, CircularProgress, Box } from '@mui/material';
-import FruitList from './components/fruitList/FruitList';
-import FruitJar from './components/fruitJar/FruitJar';
+import FruitJar from './components/fruitJar/FruitJar.tsx';
 import { Fruit } from './types/fruit';
 import ApiServes from './services/server';
 import Header from './components/header/Header';
 import { SelectChangeEvent } from '@mui/material/Select';
-import styles from './App.module.css'; // Import the CSS Module
+import styles from './App.module.css';
+import FruitList from './components/fruitList/FruitList.tsx'; // Import the CSS Module
 
 const App: React.FC = () => {
   const [fruits, setFruits] = useState<Fruit[]>([]);
