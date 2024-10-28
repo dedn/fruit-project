@@ -1,0 +1,29 @@
+.card {
+  width: 100%;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.content {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  margin-top: 16px;
+  flex-wrap: wrap;
+}
+
+.list {
+  flex: 1;
+  margin: 0;
+  padding: 0;
+}
+
+.pieChartContainer {
+  flex: 0 0 400px;
+  margin-left: 16px;
+  margin-top: 16px;
+}
