@@ -1,0 +1,20 @@
+.card {
+  margin: 4px 0;
+
+  .addButton {
+    padding: 4px 8px;
+    font-size: 10px;
+  }
+
+  .cardContent {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 10px 5px !important;
+  }
+}
+
+.fruitInfo {
+  display: flex;
+  flex-direction: column;
+}
