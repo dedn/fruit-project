@@ -1,20 +1,11 @@
 import React, { useState } from 'react';
-import {
-  Card,
-  CardContent,
-  Typography,
-  Button,
-  Collapse,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-} from '@mui/material';
+import { Typography, Collapse, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 import { Fruit } from '../../types/fruit';
 import { SelectChangeEvent } from '@mui/material/Select';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import './fruitList.css';
+import FruitCard from '../fruidCard/FruitCard.tsx';
 
 interface FruitListProps {
   fruits: Fruit[];
@@ -58,38 +49,7 @@ const FruitList: React.FC<FruitListProps> = ({ fruits, groupBy, addToJar, onGrou
           <div key={group} style={{ marginBottom: '16px' }}>
             {groupBy === 'None' ? (
               groupedFruits[group].map((fruit: Fruit) => (
-                <Card key={fruit.name} variant="outlined" style={{ margin: '4px 0' }}>
-                  <CardContent
-                    style={{
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                      padding: '5px 10px',
-                    }}
-                  >
-                    <div style={{ display: 'flex', flexDirection: 'column' }}>
-                      <Typography>{fruit.name}</Typography>
-                      <Typography
-                        variant="body2"
-                        color="textSecondary"
-                        style={{ fontSize: '12px' }}
-                      >
-                        ({fruit.nutritions.calories} calories)
-                      </Typography>
-                    </div>
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      style={{
-                        padding: '4px 8px',
-                        fontSize: '10px',
-                      }}
-                      onClick={() => addToJar(fruit)}
-                    >
-                      Add
-                    </Button>
-                  </CardContent>
-                </Card>
+                <FruitCard key={fruit.name} fruit={fruit} onAdd={addToJar} />
               ))
             ) : (
               <div style={{ marginTop: '10px' }}>
@@ -115,38 +75,7 @@ const FruitList: React.FC<FruitListProps> = ({ fruits, groupBy, addToJar, onGrou
                 </Typography>
                 <Collapse in={openGroups[group]} timeout="auto" unmountOnExit>
                   {groupedFruits[group].map((fruit: Fruit) => (
-                    <Card key={fruit.name} variant="outlined" style={{ margin: '4px 0' }}>
-                      <CardContent
-                        style={{
-                          display: 'flex',
-                          justifyContent: 'space-between',
-                          alignItems: 'center',
-                          padding: '5px 10px',
-                        }}
-                      >
-                        <div style={{ display: 'flex', flexDirection: 'column' }}>
-                          <Typography>{fruit.name}</Typography>
-                          <Typography
-                            variant="body2"
-                            color="textSecondary"
-                            style={{ fontSize: '12px' }}
-                          >
-                            ({fruit.nutritions.calories} calories)
-                          </Typography>
-                        </div>
-                        <Button
-                          variant="contained"
-                          color="primary"
-                          style={{
-                            padding: '4px 8px',
-                            fontSize: '10px',
-                          }}
-                          onClick={() => addToJar(fruit)}
-                        >
-                          Add
-                        </Button>
-                      </CardContent>
-                    </Card>
+                    <FruitCard key={fruit.name} fruit={fruit} onAdd={addToJar} />
                   ))}
                 </Collapse>
               </div>
