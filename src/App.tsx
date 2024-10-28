@@ -1,40 +1,21 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState } from 'react';
 import { Container, Typography, Grid, Snackbar, CircularProgress, Box } from '@mui/material';
 import FruitJar from './components/fruitJar/FruitJar.tsx';
 import { Fruit } from './types/fruit';
-import ApiServes from './services/server';
+import { useFruitList } from './services/apiService.ts';
 import Header from './components/header/Header';
 import { SelectChangeEvent } from '@mui/material/Select';
 import styles from './App.module.css';
 import FruitList from './components/fruitList/FruitList.tsx';
 
 const App: React.FC = () => {
-  const [fruits, setFruits] = useState<Fruit[]>([]);
   const [groupBy, setGroupBy] = useState<string>('None');
   const [jar, setJar] = useState<Fruit[]>([]);
   const [notification, setNotification] = useState<string | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
-  const apiService = useMemo(() => new ApiServes(), []);
+  // TODO: Consider moving state management for `groupBy to a reducer or a state management if the complexity
+  const { data: response, error, isLoading } = useFruitList();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      try {
-        const response = await apiService.getDataList<Fruit[]>();
-        if (response.success && response.data) {
-          setFruits(response.data);
-        } else {
-          console.error('Failed to fetch fruits:', response.error);
-        }
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, [apiService]);
+  const fruits = response?.data || [];
 
   const handleGroupByChange = (event: SelectChangeEvent<string>) => {
     setGroupBy(event.target.value);
@@ -70,13 +51,15 @@ const App: React.FC = () => {
         <Typography variant="h4" className={styles.title}>
           Fruit App
         </Typography>
-        {loading ? (
+        {isLoading ? (
           <Box className={styles.loadingContainer}>
             <CircularProgress />
             <Typography variant="h6" className={styles.loadingText}>
               Loading fruits...
             </Typography>
           </Box>
+        ) : error ? (
+          <Typography variant="h6">Error loading fruits: {error.message}</Typography>
         ) : (
           <Grid container spacing={3} className={styles.gridContainer}>
             <Grid item xs={12} md={3} className={styles.fruitList}>

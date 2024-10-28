@@ -1,4 +1,3 @@
-// FruitList.tsx
 import React, { useState, useMemo } from 'react';
 import { Typography, Collapse, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 import { Fruit } from '../../types/fruit';
@@ -6,7 +5,7 @@ import { SelectChangeEvent } from '@mui/material/Select';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import styles from './FruitList.module.css';
-import FruitCard from '../fruidCard/FruitCard.tsx'; // Assuming you created a CSS module
+import FruitCard from '../fruidCard/FruitCard.tsx';
 
 interface FruitListProps {
   fruits: Fruit[];
