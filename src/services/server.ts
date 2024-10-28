@@ -7,7 +7,7 @@ interface ApiResponse<T> {
 }
 
 export default class ApiService {
-  private _apiBase: string = import.meta.env.VITE_API_BASE_URL || '/api';
+  private _apiBase: string = import.meta.env.VITE_API_BASE_URL;
 
   // General method to fetch resources with dynamic method and URL
   private async request<T>(
