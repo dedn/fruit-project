@@ -1,7 +1,6 @@
 # Fruit Project
 
-A simple React application built with TypeScript and Vite that displays a list of fruits using the Fruityvice API.
-
+A simple React application built with TypeScript and Vite that displays a list of fruits using the simple API and simple proxy placed on Heroku to avoid CORS errors.(https://proxy-fruit-project-265fff9e0ca8.herokuapp.com/proxy)
 ## Table of Contents
 
 - [Features](#features)
