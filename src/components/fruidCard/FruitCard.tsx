@@ -1,4 +1,3 @@
-// FruitCard.tsx
 import React from 'react';
 import { Card, CardContent, Typography, Button } from '@mui/material';
 import { Fruit } from 'types/fruit';

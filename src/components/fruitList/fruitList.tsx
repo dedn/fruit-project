@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
+// FruitList.tsx
+import React, { useState, useMemo } from 'react';
 import { Typography, Collapse, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 import { Fruit } from '../../types/fruit';
 import { SelectChangeEvent } from '@mui/material/Select';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import './fruitList.css';
-import FruitCard from '../fruidCard/FruitCard.tsx';
+import styles from './FruitList.module.css';
+import FruitCard from '../fruidCard/FruitCard.tsx'; // Assuming you created a CSS module
 
 interface FruitListProps {
   fruits: Fruit[];
@@ -21,14 +22,30 @@ const FruitList: React.FC<FruitListProps> = ({ fruits, groupBy, addToJar, onGrou
     setOpenGroups((prev) => ({ ...prev, [group]: !prev[group] }));
   };
 
-  const groupedFruits = fruits.reduce((acc: any, fruit) => {
-    const key = groupBy === 'None' ? 'None' : fruit[groupBy.toLowerCase() as keyof Fruit];
-    if (!acc[key]) {
-      acc[key] = [];
-    }
-    acc[key].push(fruit);
-    return acc;
-  }, {});
+  const groupedFruits = useMemo(() => {
+    return fruits.reduce<{ [key: string]: Fruit[] }>((acc, fruit) => {
+      const key = groupBy === 'None' ? 'None' : fruit[groupBy.toLowerCase() as keyof Fruit];
+      if (!acc[key]) {
+        acc[key] = [];
+      }
+      acc[key].push(fruit);
+      return acc;
+    }, {});
+  }, [fruits, groupBy]);
+
+  const renderGroup = (group: string) => (
+    <div className={styles.groupContainer} key={group}>
+      <Typography variant="h6" className={styles.groupTitle} onClick={() => toggleGroup(group)}>
+        {group}
+        {openGroups[group] ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+      </Typography>
+      <Collapse in={openGroups[group]} timeout="auto" unmountOnExit>
+        {groupedFruits[group].map((fruit: Fruit) => (
+          <FruitCard key={fruit.name} fruit={fruit} onAdd={addToJar} />
+        ))}
+      </Collapse>
+    </div>
+  );
 
   return (
     <>
@@ -41,47 +58,14 @@ const FruitList: React.FC<FruitListProps> = ({ fruits, groupBy, addToJar, onGrou
           <MenuItem value="Genus">Genus</MenuItem>
         </Select>
       </FormControl>
-      <div
-        className="scroll-container"
-        style={{ maxHeight: '800px', overflowY: 'auto', marginTop: '16px' }}
-      >
-        {Object.keys(groupedFruits).map((group) => (
-          <div key={group} style={{ marginBottom: '16px' }}>
-            {groupBy === 'None' ? (
-              groupedFruits[group].map((fruit: Fruit) => (
+      <div className={styles.scrollContainer}>
+        {Object.keys(groupedFruits).map((group) => {
+          return groupBy === 'None'
+            ? groupedFruits[group].map((fruit: Fruit) => (
                 <FruitCard key={fruit.name} fruit={fruit} onAdd={addToJar} />
               ))
-            ) : (
-              <div style={{ marginTop: '10px' }}>
-                <Typography
-                  variant="h6"
-                  style={{
-                    cursor: 'pointer',
-                    paddingLeft: '10px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    fontSize: '14px',
-                  }}
-                  onClick={() => toggleGroup(group)}
-                  onMouseEnter={(e) => (e.currentTarget.style.color = '#3f51b5')}
-                  onMouseLeave={(e) => (e.currentTarget.style.color = 'inherit')}
-                >
-                  {group}
-                  {openGroups[group] ? (
-                    <ExpandLessIcon style={{ marginLeft: '8px' }} />
-                  ) : (
-                    <ExpandMoreIcon style={{ marginLeft: '8px' }} />
-                  )}
-                </Typography>
-                <Collapse in={openGroups[group]} timeout="auto" unmountOnExit>
-                  {groupedFruits[group].map((fruit: Fruit) => (
-                    <FruitCard key={fruit.name} fruit={fruit} onAdd={addToJar} />
-                  ))}
-                </Collapse>
-              </div>
-            )}
-          </div>
-        ))}
+            : renderGroup(group);
+        })}
       </div>
     </>
   );
