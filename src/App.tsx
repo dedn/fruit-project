@@ -6,7 +6,7 @@ import ApiServes from './services/server';
 import Header from './components/header/Header';
 import { SelectChangeEvent } from '@mui/material/Select';
 import styles from './App.module.css';
-import FruitList from './components/fruitList/FruitList.tsx'; // Import the CSS Module
+import FruitList from './components/fruitList/FruitList.tsx';
 
 const App: React.FC = () => {
   const [fruits, setFruits] = useState<Fruit[]>([]);

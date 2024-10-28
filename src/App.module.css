@@ -1,13 +1,12 @@
-/* App.module.css */
 
 .container {
   margin: 0 auto;
   padding: 40px 20px;
-}
 
-.title {
-  margin: 40px 0;
-  text-align: center;
+  .title {
+    margin-bottom: 40px;
+    text-align: center;
+  }
 }
 
 .loadingContainer {
@@ -28,10 +27,10 @@
 }
 
 .fruitList {
-  flex: 1 1 100%; /* Default to full width on small screens */
-  max-width: 300px; /* Limit width on larger screens */
+  flex: 1 1 100%;
+  max-width: 300px;
 }
 
 .fruitJar {
-  flex: 1 1 100%; /* Default to full width on small screens */
+  flex: 1 1 100%;
 }
